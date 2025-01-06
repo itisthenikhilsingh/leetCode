@@ -17,11 +17,13 @@ public:
         {
             return ;
         }
+        
+        invertTree(root->right);
+        
+        invertTree(root->left);
         TreeNode* temp=root->right;
         root->right=root->left;
         root->left=temp;
-        invertTree(root->right);
-        invertTree(root->left);
 
     }
     TreeNode* invertTree(TreeNode* root) {
