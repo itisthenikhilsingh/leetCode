@@ -1,21 +1,20 @@
 class Solution {
 public:
     bool isAnagram(string s, string t) {
-        map<char,int> hash1;
-
+        if(s.size()!=t.size())
+        {
+            return false;
+        }
+        map<char,int> hash;
         for(auto i:s)
         {
-            hash1[i]++;
+            hash[i]++;
         }
-        map<char,int> hash2;
-
         for(auto i:t)
         {
-            hash2[i]++;
+            hash[i]--;
+            if( hash[i]<0) return false;
         }
-        return hash1==hash2;
-        
-        
-        
+        return true;   
     }
 };
