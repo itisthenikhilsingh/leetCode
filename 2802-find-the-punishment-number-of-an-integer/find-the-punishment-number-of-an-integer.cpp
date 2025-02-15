@@ -1,55 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to check if the square of `root` (i.e. p) can be partitioned
+// into contiguous parts whose sum equals `root`.
+bool valid(int root, int p) {
+    string s = to_string(p);
+    // Recursive lambda for exploring partitions.
+    auto go = [&](auto&& go, int i, int sum, int curr) -> bool {
+        if (i >= s.size())
+            return sum == root;
+        int x = s[i] - '0';
+        // Option 1: Extend the current segment.
+        bool option1 = go(go, i + 1, sum - curr + (10 * curr + x), 10 * curr + x);
+        // Option 2: Start a new segment with the current digit.
+        bool option2 = go(go, i + 1, sum + x, x);
+        return option1 || option2;
+    };
+    return go(go, 0, 0, 0);
+}
+
+// Precomputed cumulative punishment array.
+int punishment[1001];
+
+// Precomputation block that runs before main() or any instance is created.
+auto init = []() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    // Compute punishment[i] for each i = 1 to 1000.
+    for (int i = 1; i <= 1000; i++) {
+        if (valid(i, i * i))
+            punishment[i] = i * i;
+        else
+            punishment[i] = 0;
+    }
+    // Build the cumulative sum array.
+    for (int i = 1; i <= 1000; i++) {
+        punishment[i] += punishment[i - 1];
+    }
+    return 0;
+}();
+
 class Solution {
 public:
-    // Helper function: Checks if we can partition the string `s` (which represents i*i)
-    // starting from `index`, so that the sum of partitions plus `sum` equals target.
-    bool isValidPartition(const string &s, int index, int target, int sum, vector<vector<int>> &memo) {
-        // Base case: if we've reached the end of the string,
-        // check if we've exactly reached the target sum.
-        if (index == s.size())
-            return sum == target;
-        
-        // If we have computed this state before, return the stored result.
-        if (memo[index][sum] != -1)
-            return memo[index][sum];
-        
-        long long num = 0;
-        bool valid = false;
-        // Try every possible partition by extending the current number.
-        for (int j = index; j < s.size(); j++) {
-            num = num * 10 + (s[j] - '0');
-            // Only explore further if adding num does not exceed the target.
-            if (sum + num <= target && isValidPartition(s, j + 1, target, sum + num, memo)) {
-                valid = true;
-                break;  // Found a valid partition, so no need to try further.
-            }
-        }
-        // Memorize the result for current state (index, sum).
-        memo[index][sum] = valid;
-        return valid;
-    }
-    
-    // For a given integer i, this function checks if i*i can be partitioned into
-    // contiguous substrings that sum up exactly to i.
-    bool isTrue(int i) {
-        // Convert i*i into a string.
-        string s = to_string((long long)i * i);
-        // Create a memoization table:
-        // Dimensions: [s.size()+1] x [target (i) + 1]. 
-        // We use -1 to indicate an uncomputed state.
-        vector<vector<int>> memo(s.size() + 1, vector<int>(i + 1, -1));
-        return isValidPartition(s, 0, i, 0, memo);
-    }
-    
-    // Main function to compute the punishment number for n.
     int punishmentNumber(int n) {
-        int ans = 0;
-        // For every i from 1 to n, if i passes the partition test,
-        // add i*i to the final answer.
-        for (int i = 1; i <= n; i++) {
-            if (isTrue(i)) {
-                ans += i * i;
-            }
-        }
-        return ans;
+        return punishment[n];
     }
 };
