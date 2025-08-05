@@ -2,17 +2,15 @@ class Solution {
 public:
     int numOfUnplacedFruits(vector<int>& fruits, vector<int>& baskets) {
 
-        int ans=fruits.size();
-        for(int x: fruits){
-            for(int& B: baskets){// B must be called by ref
-                if (x<=B){
-                    ans--;
-                    B=0;
+                for(int i = 0; i < fruits.size(); i++) {
+            for(int j = 0; j < baskets.size(); j++) {
+                if(fruits[i] <= baskets[j]) {
+                    baskets.erase(baskets.begin()+j);
                     break;
                 }
             }
         }
-        return ans;
+        return baskets.size();
 
         
 
