@@ -3,6 +3,7 @@ public:
     void dfs(int node ,vector<vector<int>>& isConnected, vector<int>& isVisted)
     {
         //base conditon that if the node is alredy visited then just skip the part
+        isVisted[node] =1;
 
         //lopping through the all the connection of the node ini 2d array
         for(int i=0;i<isConnected.size();i++)
