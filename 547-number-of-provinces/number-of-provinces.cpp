@@ -1,42 +1,41 @@
 class Solution {
 public:
-    void dfs(int node ,vector<vector<int>>& isConnected, vector<int>& isVisted)
+    void dfs(int node, vector<vector<int>>& isConnected, vector<int>& isVisited)
     {
-        //base conditon that if the node is alredy visited then just skip the part
-        isVisted[node] =1;
+        // Mark the current node as visited as soon as we enter DFS
+        isVisited[node] = 1;
 
-        //lopping through the all the connection of the node ini 2d array
-        for(int i=0;i<isConnected.size();i++)
+        // Traverse all possible connections of the current node
+        for (int i = 0; i < isConnected.size(); i++)
         {
-            //if we find the connection and that is not visted 
-            if(isConnected[node][i]==1 && !isVisted[i]) {
-                
-                // the array is updated as we had alredy visited it
-                isVisted[i]=1;
-
-                // now visting all connection of the connected node 
-                dfs(i , isConnected ,isVisted);
-                }
-        }
-        return;
-    }
-    int findCircleNum(vector<vector<int>>& isConnected) {
-
-        int nodes= isConnected.size();
-        int ans=0;
-
-        vector<int> isVisted(nodes,0);
-
-        for(int i=0;i<nodes;i++)
-        {
-            if(isVisted[i]==0)
+            // If there is a direct connection and the node is not visited
+            if (isConnected[node][i] == 1 && !isVisited[i])
             {
-                ans++;
-                dfs(i , isConnected ,isVisted);
-
+                // Recursively visit the connected node
+                dfs(i, isConnected, isVisited);
             }
-            else continue;
         }
-        return ans;
+    }
+
+    int findCircleNum(vector<vector<int>>& isConnected)
+    {
+        int nodes = isConnected.size();
+        int provinces = 0;
+
+        // Visited array to keep track of visited cities
+        vector<int> isVisited(nodes, 0);
+
+        // Check each node
+        for (int i = 0; i < nodes; i++)
+        {
+            // If the node is not visited, it starts a new province
+            if (!isVisited[i])
+            {
+                provinces++;
+                dfs(i, isConnected, isVisited);
+            }
+        }
+
+        return provinces;
     }
 };
