@@ -16,8 +16,8 @@ public:
                 }
         }
 
-        digits.push_back(1);
-        reverse(digits.begin(),digits.end());
+        digits.push_back(0);
+        digits[0]=1;
         return digits;
     }
 };
