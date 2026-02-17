@@ -1,19 +1,21 @@
 class Solution {
 public:
-    int helper(int n , vector<int>& dp)
-    {
-        if(dp[n]!=-1) return dp[n];
-        return dp[n]=helper(n-1,dp)+helper(n-2,dp);
-    }
+   
     int fib(int n) {
+        //this is in in tabularatio way;
+        if (n<2) return n;
 
-        if(n<2) return n;
-        
-        vector<int> dp(n+1,-1);
-        dp[0]=0;
-        dp[1]=1;
+        int prev=0;
+        int prev2=1;
 
-        return helper(n,dp);
+        for(int i =1;i<n;i++)
+        {
+            int cur=prev+prev2;
+            prev=prev2;
+            prev2= cur;
+
+        }
+        return prev2;
         
     }
 };
